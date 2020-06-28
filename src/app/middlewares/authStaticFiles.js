@@ -11,13 +11,13 @@ export default async (req, res, next) => {
   const { t: token } = req.query;
 
   if (!token) {
-    return res.status(401).json({ error: "No permission to access" });
+    return res.status(401).json({ error: "Sem permissão para acessar" });
   }
 
   const fileExists = await File.findOne({ path: filePath });
 
   if (!fileExists) {
-    return res.status(400).json({ error: "File does not exist" });
+    return res.status(400).json({ error: "Arquivo não existe" });
   }
 
   const folder = await Folder.findById(fileExists.folder);
@@ -29,11 +29,11 @@ export default async (req, res, next) => {
       folder.sharedUsers.find((shareId) => shareId.toString() === id);
 
     if (!isPermission) {
-      return res.status(401).json({ error: "No permission to access" });
+      return res.status(401).json({ error: "Sem permissão para acessar" });
     }
 
     return next();
   } catch (err) {
-    return res.status(401).json({ error: "Token invalid" });
+    return res.status(401).json({ error: "Token inválido" });
   }
 };

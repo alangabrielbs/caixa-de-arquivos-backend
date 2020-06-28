@@ -13,6 +13,7 @@ import UserController from "./app/controllers/UserController";
 import SessionController from "./app/controllers/SessionController";
 import ShareFolderController from "./app/controllers/ShareFolderController";
 import ForgotPasswordController from "./app/controllers/ForgotPasswordController";
+import VerifyEmailController from "./app/controllers/VerifyEmailController";
 
 routes.get("/", (req, res) => res.json({ name: "Caixa de Arquivos - API" }));
 
@@ -25,6 +26,8 @@ routes.post(
 );
 
 routes.put("/passwords/reset", ForgotPasswordController.updatePassword);
+
+routes.get("/verify", VerifyEmailController.verifyEmail);
 
 routes.use(authMiddlewares);
 

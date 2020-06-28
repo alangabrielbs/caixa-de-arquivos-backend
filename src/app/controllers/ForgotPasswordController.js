@@ -3,6 +3,10 @@ import { isBefore, addHours } from "date-fns";
 import { uuid } from "uuidv4";
 import User from "../models/User";
 
+import Queue from "../../lib/Queue";
+import ForgotMail from "../jobs/ForgotMail";
+import PasswordRedefinedMail from "../jobs/PasswordRedefinedMail";
+
 class ForgotPasswordController {
   async createTokenForgotPassword(req, res) {
     const schema = Yup.object().shape({
@@ -26,6 +30,10 @@ class ForgotPasswordController {
     user.tokenForgotPassword = uuid();
     user.tokenForgotPasswordExpire = addHours(new Date(), 8);
     user.save();
+
+    await Queue.add(ForgotMail.key, {
+      user,
+    });
 
     return res.json({ message: "Quase lá, dê uma checada em seu e-mail :)" });
   }
@@ -63,6 +71,11 @@ class ForgotPasswordController {
     user.tokenForgotPassword = null;
     user.tokenForgotPasswordExpire = null;
     user.save();
+
+    await Queue.add(PasswordRedefinedMail.key, {
+      name: user.name,
+      email: user.email,
+    });
 
     return res.json({ message: "Boa, agora é só fazer login :)" });
   }

@@ -1,6 +1,10 @@
 import * as Yup from "yup";
+import { uuid } from "uuidv4";
 import User from "../models/User";
 import Folder from "../models/Folder";
+
+import Queue from "../../lib/Queue";
+import VerifyEmailMail from "../jobs/VerifyEmailMail";
 
 class UserController {
   async createUser(req, res) {
@@ -20,12 +24,21 @@ class UserController {
       return res.status(400).json({ error: "Usuário já existe." });
     }
 
-    const { id, name, email } = await User.create(req.body);
+    const { id, name, email, tokenCheckEmail } = await User.create({
+      ...req.body,
+      tokenCheckEmail: uuid(),
+    });
 
     await Folder.create({
       name: "Root",
       root: true,
       owner: id,
+    });
+
+    await Queue.add(VerifyEmailMail.key, {
+      name,
+      email,
+      tokenCheckEmail,
     });
 
     return res.json({

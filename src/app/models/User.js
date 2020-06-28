@@ -24,6 +24,18 @@ const User = new mongoose.Schema(
       type: String,
       default: null,
     },
+    verifiedEmail: {
+      type: String,
+      default: false,
+    },
+    tokenCheckEmail: {
+      type: String,
+      required: false,
+    },
+    betaTester: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

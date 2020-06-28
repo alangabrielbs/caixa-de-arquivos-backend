@@ -2,6 +2,12 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 
+import { UI, setQueues } from "bull-board";
+
+import Queue from "./lib/Queue";
+
+setQueues(Queue.allQueue.map((queue) => queue.bull));
+
 import routes from "./routes";
 
 import "./database";
@@ -18,6 +24,7 @@ class App {
 
   middlewares() {
     this.server.use(cors());
+    this.server.use("/admin/queues", UI);
     this.server.use(express.json());
     this.server.use(
       "/t/files",
@@ -27,7 +34,7 @@ class App {
   }
 
   routes() {
-    this.server.use(routes);
+    this.server.use("/v1", routes);
   }
 }
 
