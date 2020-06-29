@@ -27,9 +27,7 @@ const File = new mongoose.Schema(
 );
 
 File.virtual("url").get(function () {
-  const url = process.env.URL || "http://localhost:3333";
-
-  return `${url}/t/files/${encodeURIComponent(this.path)}`;
+  return `${process.env.APP_URL}/t/files/${encodeURIComponent(this.path)}`;
 });
 
 export default mongoose.model("File", File);

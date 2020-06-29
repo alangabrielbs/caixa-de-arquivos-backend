@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import express from "express";
 import path from "path";
 import cors from "cors";
@@ -27,7 +29,7 @@ class App {
     this.server.use("/admin/queues", UI);
     this.server.use(express.json());
     this.server.use(
-      "/t/files",
+      "/v1/t/files",
       authStaticFiles,
       express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
     );

@@ -1,12 +1,16 @@
 import Folder from "../models/Folder";
 import User from "../models/User";
 
+import Queue from "../../lib/Queue";
+import SharedFolder from "../jobs/SharedFolder";
+
 class ShareFolderController {
   async shareFolder(req, res) {
     const { folderId } = req.params;
     const { email } = req.body;
 
     const user = await User.findOne({ email });
+    const owner = await User.findById(req.userId);
 
     if (!user) {
       return res.status(401).json({ error: "Usuário não encontrado" });
@@ -34,6 +38,12 @@ class ShareFolderController {
     }
 
     folder.save();
+
+    await Queue.add(SharedFolder.key, {
+      user,
+      owner,
+      folderName: folder.title,
+    });
 
     return res.json(folder);
   }

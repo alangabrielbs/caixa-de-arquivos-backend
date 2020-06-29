@@ -1,3 +1,6 @@
+import * as Yup from "yup";
+import { extname } from "path";
+
 import Folder from "../models/Folder";
 import File from "../models/File";
 
@@ -28,6 +31,26 @@ class FileController {
     const { _id, title, owner, url, createdAt } = file;
 
     return res.json({ _id, title, owner, url, createdAt });
+  }
+
+  async updateName(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: "Falha na validação" });
+    }
+
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const file = await File.findById(id);
+
+    file.name = `${name}${extname(file.path)}`;
+    file.save();
+
+    return res.json(file);
   }
 }
 

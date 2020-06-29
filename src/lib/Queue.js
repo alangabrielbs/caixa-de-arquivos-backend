@@ -5,8 +5,9 @@ import redisConfig from "../config/redis";
 import ForgotMail from "../app/jobs/ForgotMail";
 import VerifyEmailMail from "../app/jobs/VerifyEmailMail";
 import PasswordRedefinedMail from "../app/jobs/PasswordRedefinedMail";
+import SharedFolder from "../app/jobs/SharedFolder";
 
-const jobs = [ForgotMail, VerifyEmailMail, PasswordRedefinedMail];
+const jobs = [ForgotMail, VerifyEmailMail, PasswordRedefinedMail, SharedFolder];
 
 class QueueLib {
   constructor() {

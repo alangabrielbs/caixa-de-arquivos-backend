@@ -88,9 +88,30 @@ class FolderController {
     const { id } = req.params;
     const { isFavorite } = req.query;
 
-    const folder = await Folder.findByIdAndUpdate(
-      id,
+    const folder = await Folder.findOneAndUpdate(
+      { _id: id },
       { favorite: isFavorite },
+      { new: true }
+    );
+
+    return res.json(folder);
+  }
+
+  async updateTitle(req, res) {
+    const schema = Yup.object().shape({
+      title: Yup.string().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: "Falha na validação" });
+    }
+
+    const { id } = req.params;
+    const { title } = req.body;
+
+    const folder = await Folder.findOneAndUpdate(
+      { _id: id },
+      { title },
       { new: true }
     );
 

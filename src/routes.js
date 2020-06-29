@@ -36,7 +36,10 @@ routes.put("/users", UserController.update);
 routes.get("/folders", FolderController.showAllFoldersAndFiles);
 routes.post("/folders/:parentFolderId", FolderController.createNewFolder);
 routes.get("/folder/:id", FolderController.showFiles);
-routes.put("/folder/:id", FolderController.favorite);
+routes.put("/folder/:id/favorite", FolderController.favorite);
+routes.put("/folder/:id", FolderController.updateTitle);
+
+routes.put("/file/:id", FileController.updateName);
 
 routes.get("/folders/shared", ShareFolderController.showFolderShare);
 routes.post("/share/:folderId", ShareFolderController.shareFolder);

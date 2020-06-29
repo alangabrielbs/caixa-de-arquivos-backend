@@ -6,14 +6,12 @@ class Database {
   }
 
   mongo() {
-    this.mongoConnection = mongoose.connect(
-      "mongodb://localhost/caixa-de-arquivos",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-      }
-    );
+    this.mongoConnection = mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    });
   }
 }
 
